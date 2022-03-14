@@ -1,0 +1,26 @@
+name: 'Slack Deployment Notification'
+description: 'Publishes a deployment notification to Slack'
+inputs:
+  environment:
+    description: 'Environment name for the deployment (staging, uat, production)'
+    required: true
+  slack-webhook-url:
+    description: 'Slack webhook url for publishing the message'
+    required: true
+  github-token:
+    description: 'Slack webhook url for publishing the message'
+    required: true
+  prefix:
+    description: 'Github token to access the repository'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+      - name: Publish the notification to Slack
+        uses: innocarpe/actions-slack@v1
+        with:
+          status: ${{ job.status }}
+          success_text: '@${{ github.actor }} just started the `${{ github.workflow }}` workflow for `${{ github.repository }}@${{ github.ref }}` for `${{ inputs.environment }}`'
+        env:
+          GITHUB_TOKEN: ${{ inputs.github-token }}
+          SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}

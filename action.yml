@@ -1,5 +1,7 @@
 name: 'Slack Deployment Notification'
+
 description: 'Publishes a deployment notification to Slack'
+
 inputs:
   environment:
     description: 'Environment name for the deployment (staging, uat, production)'
@@ -8,19 +10,33 @@ inputs:
     description: 'Slack webhook url for publishing the message'
     required: true
   github-token:
-    description: 'Slack webhook url for publishing the message'
-    required: true
-  prefix:
     description: 'Github token to access the repository'
+    required: true
+  deployment-type:
+    description: 'Optional deployment type (i.e. Application, Infrastructure)'
     required: false
+
 runs:
-  using: 'composite'
+  using: composite
   steps:
-      - name: Publish the notification to Slack
-        uses: innocarpe/actions-slack@v1
-        with:
-          status: ${{ job.status }}
-          success_text: '@${{ github.actor }} just started the `${{ github.workflow }}` workflow for `${{ github.repository }}@${{ github.ref }}` for `${{ inputs.environment }}`'
-        env:
-          GITHUB_TOKEN: ${{ inputs.github-token }}
-          SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
+    - name: Format Slack deployment message
+      id: format-message
+      shell: bash
+      run: |
+        SLACK_MESSAGE="$(node $GITHUB_ACTION_PATH/utils/format_message.js)"
+        SLACK_MESSAGE="${SLACK_MESSAGE//'%'/'%25'}"
+        SLACK_MESSAGE="${SLACK_MESSAGE//$'\n'/'%0A'}"
+        SLACK_MESSAGE="${SLACK_MESSAGE//$'\r'/'%0D'}"
+        echo "::set-output name=SlackMessage::$SLACK_MESSAGE"
+      env:
+        ACTION_ENVIRONMENT: ${{ inputs.environment }}
+        ACTION_DEPLOYMENT_TYPE: ${{ inputs.deployment-type }}
+
+    - name: Publish the notification to Slack
+      uses: innocarpe/actions-slack@v1
+      with:
+        status: ${{ job.status }}
+        success_text: '${{ steps.format-message.outputs.SlackMessage }}'
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}

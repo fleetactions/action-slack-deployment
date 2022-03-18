@@ -3,6 +3,9 @@ name: 'Slack Deployment Notification'
 description: 'Publishes a deployment notification to Slack'
 
 inputs:
+  job-status:
+    description: 'The status of the job'
+    required: true
   environment:
     description: 'Environment name for the deployment (staging, uat, production)'
     required: true
@@ -31,12 +34,15 @@ runs:
       env:
         ACTION_ENVIRONMENT: ${{ inputs.environment }}
         ACTION_DEPLOYMENT_TYPE: ${{ inputs.deployment-type }}
+        ACTION_JOB_STATUS: ${{ inputs.job-status }}
 
     - name: Publish the notification to Slack
       uses: innocarpe/actions-slack@v1
       with:
-        status: ${{ job.status }}
+        status: ${{ inputs.job-status }}
         success_text: '${{ steps.format-message.outputs.SlackMessage }}'
+        failure_text: '${{ steps.format-message.outputs.SlackMessage }}'
+        cancelled_text: '${{ steps.format-message.outputs.SlackMessage }}'
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}

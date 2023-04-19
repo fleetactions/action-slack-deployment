@@ -1,0 +1,52 @@
+{
+  "env": {
+    "jest/globals": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "jest"
+  ],
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:jest/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "import/extensions": [".js",".jsx",".ts",".tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts",".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js",".jsx",".ts",".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "max-len": [1, 120],
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "no-plusplus": 0,
+    "new-cap": 0,
+    "consistent-return": 0,
+    "no-underscore-dangle": 0,
+    "class-methods-use-this": 0,
+    "@typescript-eslint/no-unused-vars": [1, { "argsIgnorePattern": "_|__|req|res|^err|next" }],
+    "no-unused-vars": [1, { "argsIgnorePattern": "_|__|req|res|^err|next" }],
+    "arrow-body-style": [2, "as-needed"],
+    "no-param-reassign": [2, { "props": false }],
+    "comma-dangle": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": [1, { "allow": ["resolve", "reject", "done", "callback", "cb", "error", "err"] }],
+    "@typescript-eslint/comma-dangle": ["error", { "arrays": "always-multiline", "objects": "always-multiline", "imports": "always-multiline", "exports": "always-multiline", "functions": "never" }],
+    "@typescript-eslint/no-use-before-define": ["error", { "functions": false , "variables": false }],
+    "object-curly-newline": ["error", { "ObjectPattern": { "multiline": true }, "ImportDeclaration": { "multiline": true } }],
+    "no-use-before-define": [1, { "functions": false , "variables": false }],
+    "import/prefer-default-export": 0,
+    "import/no-named-as-default": 0,
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"]
+  }
+}

@@ -14,21 +14,21 @@ To use this action, add the following step in your GitHub Actions workflow file:
 
 ```yaml
 - name: Post workflow status to Slack
-  uses: fleetactions/actions-slack-deployment@main
+  uses: fleetactions/actions-slack-deployment@v1
   with:
     workflow-status: ${{ job.status }}
-    environment-name: 'staging'
-    deployment-type: 'Application'
+    environment-name: staging
+    deployment-type: application
     slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 ### Inputs
 
-| Name                | Description                                                         | Required |
-|---------------------|---------------------------------------------------------------------|----------|
-| `workflow-status`   | The status of the job (`success`, `failure`, `cancelled`)           | Yes      |
-| `environment-name`  | Environment name for the deployment (e.g., `staging`, `uat`, `production`) | Yes      |
-| `deployment-type`   | Deployment type (e.g., `Application`, `Infrastructure`)             | No       |
-| `slack-webhook-url` | [Slack webhook URL](https://api.slack.com/messaging/webhooks) for publishing the message                        | Yes      |
+| Name                | Description                                                                              | Required |
+|-------------------- |------------------------------------------------------------------------------------------|----------|
+| `workflow-status`   | The status of the job (`success`, `failure`, `cancelled`)                                | Yes      |
+| `environment-name`  | Environment name for the deployment (e.g., `staging`, `uat`, `production`)               | Yes      |
+| `deployment-type`   | Deployment type (e.g., `application`, `infrastructure`)                                  | No       |
+| `slack-webhook-url` | [Slack webhook URL](https://api.slack.com/messaging/webhooks) for publishing the message | Yes      |
 
 ## Example Slack Message
 

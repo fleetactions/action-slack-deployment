@@ -81,7 +81,7 @@ export class ActionClient {
     }
 
     return `
-${projectInformation.toUpperCase()}
+${projectInformation}
 ${branchInformation} | ${userInformation}
     `.trim();
   }
@@ -111,7 +111,7 @@ ${branchInformation} | ${userInformation}
     ];
   }
 
-  public async send(payload: IncomingWebhookSendArguments): Promise<void> {
+  private async send(payload: IncomingWebhookSendArguments): Promise<void> {
     await this.webhook.send(payload);
   }
 }
